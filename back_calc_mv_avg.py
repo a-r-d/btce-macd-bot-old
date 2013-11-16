@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 import MySQLdb
 import MySQLdb.cursors
@@ -26,7 +27,7 @@ def rowTimeToTimestamp( row ):
 def timestampTomMysql( tstamp ):
     return datetime.fromtimestamp(tstamp).strftime('%Y-%m-%d %H:%M:%S')
 
-def calcMvAvg(db, exid, curid, rows, field, offset ):
+def calcMvAvg(db, exid, curid, rows, field, offset, rowset_mod):
     global params
     global utc_offset
     for row in rows:
@@ -57,6 +58,19 @@ def calcMvAvg(db, exid, curid, rows, field, offset ):
                     created >= '%s' and
                     created <= '%s'
                     """ % ( curid, exid, startdate, enddate)
+                # I think this makes data too choppy :( 
+                #
+                #if rowset_mod != -1:
+                #    sql = """
+                #      select * 
+                #      from quote where 
+                #      currencypair_id=%d and 
+                #      exchange_id=%d and 
+                #      created >= '%s' and 
+                #      created <= '%s' and 
+                #      MOD(id,%d)=0
+                #     """ % ( curid, exid, startdate, enddate, rowset_mod)
+                    
                 print "Gettting subrows: ", sql
 
                 cursor = db.cursor()
@@ -80,24 +94,39 @@ def calcMvAvg(db, exid, curid, rows, field, offset ):
 
 def tenMins(db, exid, curid, rows  ):
     print "Doing 10 minute mv avg"
-    calcMvAvg(db, exid, curid, rows, "mv_avg_10_min", 60 * 10 );
+    calcMvAvg(db, exid, curid, rows, "mv_avg_10_min", 60 * 10, -1 );
 
 def thirtyMins(db, exid, curid, rows  ):
     print "Doing 30 minute mv avg"
-    calcMvAvg(db, exid, curid, rows, "mv_avg_30_min", 60 * 30 );
+    calcMvAvg(db, exid, curid, rows, "mv_avg_30_min", 60 * 30, -1 );
 
 def sixtyMins(db, exid, curid, rows  ):
     print "Doing 60 minute mv avg"
-    calcMvAvg(db, exid, curid, rows, "mv_avg_60_min", 60 * 60 );
+    calcMvAvg(db, exid, curid, rows, "mv_avg_60_min", 60 * 60, -1 );
 
 def twoFortyMins(db, exid, curid, rows  ):
     print "Doing 240 minute mv avg"
-    calcMvAvg(db, exid, curid, rows, "mv_avg_240_min", 60 * 60 * 4 );
+    calcMvAvg(db, exid, curid, rows, "mv_avg_240_min", 60 * 60 * 4, -1 );
 
 def sixHundyMins(db, exid, curid, rows  ):
     print "Doing 600 minute mv avg"
-    calcMvAvg(db, exid, curid, rows, "mv_avg_600_min", 60 * 600 );
+    calcMvAvg(db, exid, curid, rows, "mv_avg_600_min", 60 * 600, -1 );
 
+def oneDay(db, exid, curid, rows  ):
+    print "Doing 1 day mv avg"
+    calcMvAvg(db, exid, curid, rows, "mv_avg_1_day", 60 * 60 * 24, 25);
+
+def twoDay(db, exid, curid, rows  ):
+    print "Doing 2 day mv avg"
+    calcMvAvg(db, exid, curid, rows, "mv_avg_2_day", 60 * 60 * 24 * 2, 100);
+
+def fiveDay(db, exid, curid, rows  ):
+    print "Doing 5 day mv avg"
+    calcMvAvg(db, exid, curid, rows, "mv_avg_5_day", 60 * 60 * 24 * 5, 200);
+
+def tenDay(db, exid, curid, rows  ):
+    print "Doing 10 day mv avg"
+    calcMvAvg(db, exid, curid, rows, "mv_avg_10_day", 60 * 60 * 24 * 10, 300);
 
 def getTheRows( db, exid, curid ):
     global utc_offset
@@ -157,6 +186,10 @@ def runCalcs( args ):
         sixtyMins( db, exchange_id, currencypair_id, rows )
         twoFortyMins( db, exchange_id, currencypair_id, rows )
         sixHundyMins( db, exchange_id, currencypair_id, rows )
+        oneDay( db, exchange_id, currencypair_id, rows )
+        twoDay( db, exchange_id, currencypair_id, rows )
+        #fiveDay( db, exchange_id, currencypair_id, rows )
+        #tenDay( db, exchange_id, currencypair_id, rows )
 
 if __name__ == "__main__":
     runCalcs( sys.argv )
