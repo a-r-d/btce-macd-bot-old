@@ -16,17 +16,18 @@ class api:
  __api_secret	= '';
  __nonce_v	= 1;
 
+ __wait_for_nonce = False
  __pairs = ["ltc_usd", "btc_usd"]
  __allowed_order_types = ["buy","sell"]
 
- def __init__(self,api_key,api_secret):
+ def __init__(self,api_key,api_secret,wait_for_nonce=False):
   self.__api_key = api_key
   self.__api_secret = api_secret
+  self.__wait_for_nonce = wait_for_nonce
 
  def __nonce(self):
-   # e.g: 1384925782.332247
-   # reduce to:  1384925782.33
-   self.__nonce_v = str(time.time()).replace('.','')[:-2]
+   if self.__wait_for_nonce: time.sleep(1)
+   self.__nonce_v = str(time.time()).split('.')[0]
 
  def __signature(self, params):
   return hmac.new(self.__api_secret, params, digestmod=hashlib.sha512).hexdigest()
@@ -95,4 +96,9 @@ class api:
    "rate"	: trate,
    "amount"	: tamount}
   return self.__api_call('Trade', params)
+
+ def CancelOrder(self, orderid):
+  params = {
+   "order_id" : orderid }
+  return self.__api_call('CancelOrder', params)
   

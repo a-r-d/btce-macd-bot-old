@@ -20,22 +20,26 @@ def mainLoop():
     print "looping..."
 
 def info():
-    api = btceapi.api( apikey, secret )
+    api = btceapi.api( apikey, secret)
     return api.getInfo()
 
 def orders( pair ):
-    api = btceapi.api( apikey, secret )
+    api = btceapi.api( apikey, secret, True )
     return api.ActiveOrders( pair )
+
+def cancelorder(pair):
+    api = btceapi.api( apikey, secret, True )
+    return api.CancelOrder( pair )
 
 def isopenorders( infos ):
     return infos["return"]["open_orders"]
 
 def buy( rate, qty ):
-    api = btceapi.api( apikey, secret )
+    api = btceapi.api( apikey, secret, True )
     return api.Trade(active_pair, "buy", rate, qty)
 
 def sell( rate, qty ):
-    api = btceapi.api( apikey, secret )
+    api = btceapi.api( apikey, secret, True )
     return api.Trade(active_pair, "sell", rate, qty)
 
 def getLTCBal( infos ):
@@ -69,15 +73,20 @@ def test():
     print "usd:",getUSDBal(infos)
     print "btc:",getBTCBal(infos)
 
-    time.sleep(0.1)
-    if isopenorders(infos) == 1:
-        print "orders- ", active_pair, ":", orders(active_pair)
-    time.sleep(0.1)
+    #if int(isopenorders(infos)) == 1:
+    orders_ret = orders(active_pair)
+    print "orders- ", active_pair, ":", orders_ret
+    order_list = orders_ret["return"]
 
-    if test_trade:
+    for key in order_list:
+        o = order_list[key]
+        print "cancelling:", o
+        cancel = cancelorder(key)
+        print cancel
+
+    #if test_trade:
         #print buy( 10, 10 )
-        time.sleep(0.1)
-        print sell( 10, 10 )
+        #print sell( 10, 10 )
 
 if __name__ == "__main__":
     test()
