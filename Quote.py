@@ -77,6 +77,15 @@ def getLast10Quote(session):
     session.commit()
     return res
 
+def getLastQuoteForID(session,currencypair_id, exchange_id):
+    res = session.query(Quote).filter(
+        and_( 
+            Quote.currencypair_id==currencypair_id,
+            Quote.exchange_id==exchange_id   
+        )).order_by(Quote.created.desc()).limit(1);
+
+    session.commit()
+    return res
 
 # note: db is in utc time, you are not I bet...
 def getQuotesNewerThanSeconds( session, utc_offset, timeperiod ):
@@ -125,6 +134,11 @@ def test():
     for r in res:
         print r.last, r.created, r.units
 
+    # test last quote for pair / exchange:
+    print "test for single last quote-"
+    res = getLastQuoteForID(session, 1, 1)
+    for r in res:
+        print float(r.last), r.created, r.units
 
 if __name__ == '__main__':
     test()

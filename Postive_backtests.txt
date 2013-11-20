@@ -1,0 +1,50 @@
+
+Positive Backtests ( better than buy + hold):
+=============================================
+
+
+A)
+11/19/13 - 10:19 PM - USD / LTC. 
+This is during + right after the big move up. The market is choppy and I get a $100 profit my algo says.
+
+building crossovers for:  mv_avg_30_min   mv_avg_600_min
+Crossovers:
+Num crossovers:  12
+
+===
+running fake trades
+
+Date range: backtestsecs = 60 * 60 * 24 * 2
+usd: 833.485990925
+ltc: 52.1560869709
+fees paid ltc: 5.06503019581
+fees_paid_total_usd: 0.607447132956
+Starting last quote:  4.08985
+Ending last quote:  7.3
+liquidate value: 1214.22610384
+original liquidate value: 1130.0013
+
+
+B).
+11/19/13 - 10:20 PM - USD / LTC. 
+This is right after the big move up. This is one day- 1/2 the time of the last run. Profit is much much less.
+
+building crossovers for:  mv_avg_30_min   mv_avg_600_min
+Crossovers:
+Num crossovers:  12
+
+===
+running fake trades
+
+usd: 795.007346985
+ltc: 49.9609578487
+fees paid ltc: 3.53632483655
+fees_paid_total_usd: 0.324237322864
+Starting last quote:  8.2574
+Ending last quote:  7.241
+liquidate value: 1157.98374791
+original liquidate value: 1126.5201
+
+
+
+
