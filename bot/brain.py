@@ -26,7 +26,7 @@ import sharedlib
 
 verbose = True
 
-loop_interval = 20 #seconds.
+loop_interval = 2 #seconds.
 exchange_id = 1
 currencypair_id = 3 # btc / usd
 #currencypair_id = 1 # ltc / usd
@@ -63,13 +63,16 @@ def calcSellQtyCoin(quote, fundsCoin):
     return price, round(qty, 5)
 
 
-def calcBuyQtyCoin(quote, funds):
+def calcBuyQtyCoin(quote, fundsDollar):
     # buy @ ask
-    print "Funds:", funds
+    print "Funds:", fundsDollar
     price = quote.ask
     #always leave 1%
-    qty = fundsCoin * 0.99
-    return price, round(qty, 5)
+    # buy will be in dollars. 
+    qty = fundsDollar * 0.99
+    #divide the quantity dollars by the dollar quote coin
+    #get the quantity in coins
+    return price, round( qty / quote.last, 5)
 
 
 def mainLoop():
@@ -161,6 +164,8 @@ def mainLoop():
 
         # Sleep after you enter the orders, this is the end.
         time.sleep(loop_interval)
+        break
+
 
 
 def test():
