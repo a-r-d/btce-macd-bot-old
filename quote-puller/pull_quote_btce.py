@@ -13,6 +13,13 @@ DB_USER = ""
 DB_PASS = ""
 DB_NAME = "cryptotrends"
 
+local = True
+if local:
+    DB_HOST = "localhost"
+    DB_USER = "root"
+    DB_PASS = "test"
+    DB_NAME = "cryptotrends"
+
 
 BTC_2_USD = "https://btc-e.com/api/2/btc_usd/ticker"
 LTC_2_USD = "https://btc-e.com/api/2/ltc_usd/ticker"
@@ -66,7 +73,7 @@ def get_quote( url_base ):
     pprint.pprint(vars(quote))
 
     try:
-        db = MySQLdb.connect(DB_HSOT,DB_USER,DB_PASS,DB_NAME)
+        db = MySQLdb.connect(DB_HOST,DB_USER,DB_PASS,DB_NAME)
         cursor = db.cursor()
         try:
             #using prepared statementS:
@@ -168,6 +175,7 @@ def cycle():
     get_quote( BTC_2_USD )
     time.sleep(2)
     #3
+    """
     get_quote( LTC_2_BTC )
     time.sleep(2)
     #4
@@ -197,6 +205,7 @@ def cycle():
     #12
     get_quote( NMC_2_USD )
     time.sleep(2)
+    """
             
      
 if __name__ == '__main__':

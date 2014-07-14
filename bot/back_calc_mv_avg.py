@@ -7,16 +7,28 @@ import pprint
 from datetime import datetime
 import calendar
 
+"""
+Usage:
+
+back_calc_mv_avg.py [exchange_id] [currencypair_id] [seconds]
+
+Example:
+
+back_calc_mv_avg.py 1 3 86000
+
+
+"""
+
 exchange_id = 1
-currencypair_id = 1
+currencypair_id = 3 # 3 = btc / usd
 utc_offset = 60 * 60 * 5
-how_far_back = 60 * 60 * 6
+how_far_back = 60 * 60 * 6 
 
 params = {
     "host":"trollboxarchive.com",
-    "user":"cryptotrends",
+    "user":"cryptotrendsrem",
     "db":"cryptotrends",
-    "pass":"crypto123lol"
+    "pass":"qazremoteuser123"
 }
 
 def rowTimeToTimestamp( row ):
@@ -187,7 +199,7 @@ def runCalcs( args ):
         twoFortyMins( db, exchange_id, currencypair_id, rows )
         sixHundyMins( db, exchange_id, currencypair_id, rows )
         oneDay( db, exchange_id, currencypair_id, rows )
-        twoDay( db, exchange_id, currencypair_id, rows )
+        #twoDay( db, exchange_id, currencypair_id, rows )
         #fiveDay( db, exchange_id, currencypair_id, rows )
         #tenDay( db, exchange_id, currencypair_id, rows )
 

@@ -4,7 +4,7 @@ import pprint
 import traceback
 
 exchange_id = 1
-currencypair_id = 1 # 1=usd/ltc, 2=btc/ltc, 3=usd/btc
+currencypair_id = 3 # 1=usd/ltc, 2=btc/ltc, 3=usd/btc
 utc_offset = 60 * 60 * 5
 backtestsecs = 60 * 60 * 24 * 1
 
@@ -18,7 +18,6 @@ trading_fee = 0.002 ## 0.2 % trading fee
 fees_paid_total_usd = 0.0
 fees_paid_total_ltc = 0.0
 trade_records = []
-
 
 def sellCoins( quote ):
     global amount_ltc

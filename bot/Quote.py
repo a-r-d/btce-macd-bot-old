@@ -10,9 +10,17 @@ import datetime
 Base = declarative_base()
 ENGINE = None
 
+USERNAME = "cryptotrendsrem"
+HOST = "trollboxarchive.com"
+DB = "cryptotrends"
+PASS = "qazremoteuser123"
+
+# e.g.: "mysql+mysqldb://cryptotrends:crypto123lol@trollboxarchive.com/cryptotrends"
+CXN_STRING = "mysql+mysqldb://" + USERNAME + ":" + PASS + "@" + HOST + "/" + DB
+
 def openDB():
     try:
-        engine = create_engine("mysql+mysqldb://cryptotrends:crypto123lol@trollboxarchive.com/cryptotrends")
+        engine = create_engine(CXN_STRING)
         print engine.execute("select 1").scalar()
         global ENGINE
         ENGINE = engine
@@ -85,7 +93,34 @@ def getLastQuoteForID(session,currencypair_id, exchange_id):
         )).order_by(Quote.created.desc()).limit(1);
 
     session.commit()
-    return res
+
+    if res:
+        quotes = []
+        for r in res: quotes.append(r)
+        q = quotes[0]
+        return q
+    else:
+        return None
+
+#make sure first MA is set
+def getLastQuoteForIDWithMA(session,currencypair_id, exchange_id):
+    res = session.query(Quote).filter(
+        and_( 
+            Quote.currencypair_id==currencypair_id,
+            Quote.exchange_id==exchange_id,
+            Quote.mv_avg_10_min!=None
+        )).order_by(Quote.created.desc()).limit(1);
+
+    session.commit()
+
+    if res:
+        quotes = []
+        for r in res: quotes.append(r)
+        q = quotes[0]
+        return q
+    else:
+        return None
+
 
 # note: db is in utc time, you are not I bet...
 def getQuotesNewerThanSeconds( session, utc_offset, timeperiod ):

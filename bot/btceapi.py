@@ -82,9 +82,9 @@ class api:
   return self.__api_call('TradeHistory', params)
 
  def ActiveOrders(self, tpair):
-  if tpair not in self.__pairs:
-    raise Exception("Unknown pair")
   params = { "pair" : tpair }
+  if not tpair:
+    params = {}
   return self.__api_call('ActiveOrders', params)
 
  def Trade(self, tpair, ttype, trate, tamount):
