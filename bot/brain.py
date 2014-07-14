@@ -26,7 +26,7 @@ import sharedlib
 
 verbose = True
 
-loop_interval = 3 #seconds.
+loop_interval = 20 #seconds.
 exchange_id = 1
 currencypair_id = 3 # btc / usd
 #currencypair_id = 1 # ltc / usd
@@ -54,26 +54,28 @@ apikey = "ICB6DNFG-MVGUUK6H-EQUTMXJY-B0BWUBDV-QL84UKE0"
 secret = "1cbbbfe81eb4e6e1b4c6ff391d311e42bc583ffa1e97fd0f485a0471d123fd73"
 
 
-def calcSellQty(quote, funds):
+def calcSellQtyCoin(quote, fundsCoin):
     # sell @ bid
+    print "Funds:", fundsCoin
     price = quote.bid
     #always leave 1%
-    qty = round((funds * 0.99) / price, 5)
-    return price, qty
+    qty = fundsCoin * 0.99
+    return price, round(qty, 5)
 
 
-def calcBuyQty(quote, funds):
+def calcBuyQtyCoin(quote, funds):
     # buy @ ask
+    print "Funds:", funds
     price = quote.ask
     #always leave 1%
-    qty = round((funds * 0.99) / price, 5)
-    return price, qty
+    qty = fundsCoin * 0.99
+    return price, round(qty, 5)
 
 
 def mainLoop():
     print "Init Loop..."
     session = Quote.getSession()
-    api = sharedlib.BtceHelper(apikey, secret, currencypair_id)
+    api = sharedlib.BtceHelper(apikey, secret, active_pair)
 
     while(1):
         if verbose: 
@@ -125,34 +127,39 @@ def mainLoop():
         if active_pair == "btc_usd":
             if uptrend == False and btc_bal > btc_min_bal:
                 #input=Btc, out=Usd
-                price, qty = calcSellQty(quote, btc_bal)
+                price, qty = calcSellQtyCoin(quote, btc_bal)
                 if verbose:
-                    print "Initiating sell for ", qty, "@", price
+                    print "Initiating sell for ", qty, "@", price, " Last:", quote.last
                 if not safety_on:
-                    api.sell(price, qty)
+                    result = api.sell(price, qty)
+                    print result
 
             if uptrend == True and usd_bal > usd_min_bal:
-                price, qty = calcSellQty(quote, usd_bal * buy_percentage)
+                price, qty = calcSellQtyCoin(quote, usd_bal * buy_percentage)
                 if verbose:
-                    print "Initiating buy for ", qty, "@", price
+                    print "Initiating buy for ", qty, "@", price, " Last:", quote.last
                 if not safety_on:
-                    api.buy(price, qty)
+                    result = api.buy(price, qty)
+                    print result
 
         if active_pair == "ltc_usd":
             if uptrend == False and ltc_bal > ltc_min_bal:
-                price, qty = calcSellQty(quote, ltc_bal)
+                price, qty = calcSellQtyCoin(quote, ltc_bal)
                 if verbose:
-                    print "Initiating sell for ", qty, "@", price
+                    print "Initiating sell for ", qty, "@", price, " Last:", quote.last
                 if not safety_on:
-                    api.sell(price, qty)
+                    result = api.sell(price, qty)
+                    print result
 
             if uptrend == True and usd_bal > usd_min_bal:
-                price, qty = calcSellQty(quote, usd_bal * buy_percentage)
+                price, qty = calcSellQtyCoin(quote, usd_bal * buy_percentage)
                 if verbose:
-                    print "Initiating buy for ", qty, "@", price
+                    print "Initiating buy for ", qty, "@", price, " Last:", quote.last
                 if not safety_on:
-                    api.buy(price, qty)
+                    result = api.buy(price, qty)
+                    print result
 
+        # Sleep after you enter the orders, this is the end.
         time.sleep(loop_interval)
 
 

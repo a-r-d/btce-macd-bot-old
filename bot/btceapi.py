@@ -95,6 +95,7 @@ class api:
    "type"	: ttype,
    "rate"	: trate,
    "amount"	: tamount}
+  #print params
   return self.__api_call('Trade', params)
 
  def CancelOrder(self, orderid):
