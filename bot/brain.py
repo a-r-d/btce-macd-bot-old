@@ -44,8 +44,8 @@ btc_min_bal = 0.0005
 ltc_min_bal = 0.01
 usd_min_bal = 0.5
 
-fudge_factor_macd = 0.001 # 0.1% fudge factor here.
-buy_percentage = 0.75      # we will buy with 75% of the cash on hand, always sell 100%
+fudge_factor_macd = 0.0009 # 0.09% fudge factor here.
+buy_percentage = 0.95      # we will buy with 95% of the cash on hand, always sell 100%
 
 safety_on = False # must be false to run trades
 short_avg = "mv_avg_30_min"
@@ -72,9 +72,10 @@ def calcBuyQtyCoin(quote, fundsDollar):
     #always leave 1%
     # buy will be in dollars. 
     qty = fundsDollar * 0.99
+    qty = qty / quote.last
     #divide the quantity dollars by the dollar quote coin
     #get the quantity in coins
-    return price, round( qty / quote.last, 5)
+    return price, round( qty, 5)
 
 
 def mainLoop():
@@ -100,7 +101,7 @@ def mainLoop():
             uptrend = None
 
         if verbose: 
-            print "Quote Date:", quote.created
+            print "Quote Date:", quote.created, " last:", quote.last
             print "Short MA:", short_ma
             print "Long MA:", long_ma
             if uptrend:
@@ -140,7 +141,7 @@ def mainLoop():
                     print result
 
             if uptrend == True and usd_bal > usd_min_bal:
-                price, qty = calcSellQtyCoin(quote, usd_bal * buy_percentage)
+                price, qty = calcBuyQtyCoin(quote, usd_bal * buy_percentage)
                 if verbose:
                     print "Initiating buy for ", qty, "@", price, " Last:", quote.last
                 if not safety_on:
@@ -157,7 +158,7 @@ def mainLoop():
                     print result
 
             if uptrend == True and usd_bal > usd_min_bal:
-                price, qty = calcSellQtyCoin(quote, usd_bal * buy_percentage)
+                price, qty = calcBuyQtyCoin(quote, usd_bal * buy_percentage)
                 if verbose:
                     print "Initiating buy for ", qty, "@", price, " Last:", quote.last
                 if not safety_on:
