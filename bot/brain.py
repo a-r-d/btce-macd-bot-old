@@ -48,8 +48,8 @@ fudge_factor_macd = 0.0009 # 0.09% fudge factor here.
 buy_percentage = 0.95      # we will buy with 95% of the cash on hand, always sell 100%
 
 safety_on = False # must be false to run trades
-short_avg = "mv_avg_30_min"
-long_avg = "mv_avg_600_min"
+short_avg = "mv_avg_240_min"
+long_avg = "mv_avg_1_day"
 
 
 apikey = "ICB6DNFG-MVGUUK6H-EQUTMXJY-B0BWUBDV-QL84UKE0"

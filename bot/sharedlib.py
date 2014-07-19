@@ -133,7 +133,12 @@ class BtceHelper():
         return infos["return"]["funds"]["ltc"]
 
     def getUSDBal(self, infos ):
-        return infos["return"]["funds"]["usd"]
+	try:
+		return infos["return"]["funds"]["usd"]
+	except Exception,e:
+		print str(e)
+		print infos
+    		return 0
 
     def getBTCBal(self, infos ):
         return infos["return"]["funds"]["btc"]

@@ -75,6 +75,7 @@ class Quote(Base):
     mv_avg_60_min = Column(Float)
     mv_avg_240_min = Column(Float)
     mv_avg_600_min = Column(Float)
+    mv_avg_1_day = Column(Float)
 
     def __repr(self):
         return "quote: {0}, {1}, {2} id: {3}".format(self.created, self.last, self.units, self.id)
