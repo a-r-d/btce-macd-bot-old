@@ -10,12 +10,11 @@ import datetime
 Base = declarative_base()
 ENGINE = None
 
-USERNAME = "cryptotrendsrem"
-HOST = "trollboxarchive.com"
+USERNAME = ""
+HOST = ""
 DB = "cryptotrends"
-PASS = "qazremoteuser123"
+PASS = ""
 
-# e.g.: "mysql+mysqldb://cryptotrends:crypto123lol@trollboxarchive.com/cryptotrends"
 CXN_STRING = "mysql+mysqldb://" + USERNAME + ":" + PASS + "@" + HOST + "/" + DB
 
 def openDB():
@@ -88,9 +87,9 @@ def getLast10Quote(session):
 
 def getLastQuoteForID(session,currencypair_id, exchange_id):
     res = session.query(Quote).filter(
-        and_( 
+        and_(
             Quote.currencypair_id==currencypair_id,
-            Quote.exchange_id==exchange_id   
+            Quote.exchange_id==exchange_id
         )).order_by(Quote.created.desc()).limit(1);
 
     session.commit()
@@ -106,7 +105,7 @@ def getLastQuoteForID(session,currencypair_id, exchange_id):
 #make sure first MA is set
 def getLastQuoteForIDWithMA(session,currencypair_id, exchange_id):
     res = session.query(Quote).filter(
-        and_( 
+        and_(
             Quote.currencypair_id==currencypair_id,
             Quote.exchange_id==exchange_id,
             Quote.mv_avg_10_min!=None
@@ -137,10 +136,10 @@ def getQuotesNewerThanSecondsCurrEx( session, utc_offset, timeperiod, currencypa
     t = (time.time() - timeperiod) + utc_offset
     filterdate = datetime.datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
     res = session.query(Quote).filter(
-        and_( 
+        and_(
             Quote.created > filterdate,
             Quote.currencypair_id==currencypair_id,
-            Quote.exchange_id==exchange_id   
+            Quote.exchange_id==exchange_id
         ))
     session.commit()
     return res
@@ -178,10 +177,3 @@ def test():
 
 if __name__ == '__main__':
     test()
-
-
-
-
-
-
-

@@ -22,13 +22,13 @@ back_calc_mv_avg.py 1 3 86000
 exchange_id = 1
 currencypair_id = 3 # 3 = btc / usd
 utc_offset = 60 * 60 * 5
-how_far_back = 60 * 60 * 6 
+how_far_back = 60 * 60 * 6
 
 params = {
-    "host":"trollboxarchive.com",
-    "user":"cryptotrendsrem",
+    "host":".com",
+    "user":"",
     "db":"cryptotrends",
-    "pass":"qazremoteuser123"
+    "pass":""
 }
 
 def rowTimeToTimestamp( row ):
@@ -52,7 +52,7 @@ def calcMvAvg(db, exid, curid, rows, field, offset, rowset_mod):
                 params["host"],
                 params["user"],
                 params["pass"],
-                params["db"], 
+                params["db"],
                 cursorclass=MySQLdb.cursors.DictCursor)
                 print "Working on row: ", row["id"]
                 #pprint.pprint(row)
@@ -63,26 +63,26 @@ def calcMvAvg(db, exid, curid, rows, field, offset, rowset_mod):
                 print startdate, enddate, st, ed
 
                 sql = """
-                    select * 
-                    from quote where 
-                    currencypair_id=%d and 
-                    exchange_id=%d and 
+                    select *
+                    from quote where
+                    currencypair_id=%d and
+                    exchange_id=%d and
                     created >= '%s' and
                     created <= '%s'
                     """ % ( curid, exid, startdate, enddate)
-                # I think this makes data too choppy :( 
+                # I think this makes data too choppy :(
                 #
                 #if rowset_mod != -1:
                 #    sql = """
-                #      select * 
-                #      from quote where 
-                #      currencypair_id=%d and 
-                #      exchange_id=%d and 
-                #      created >= '%s' and 
-                #      created <= '%s' and 
+                #      select *
+                #      from quote where
+                #      currencypair_id=%d and
+                #      exchange_id=%d and
+                #      created >= '%s' and
+                #      created <= '%s' and
                 #      MOD(id,%d)=0
                 #     """ % ( curid, exid, startdate, enddate, rowset_mod)
-                    
+
                 print "Gettting subrows: ", sql
 
                 cursor = db.cursor()
@@ -102,7 +102,7 @@ def calcMvAvg(db, exid, curid, rows, field, offset, rowset_mod):
                 db.commit()
             except Exception, e:
                 print "Whoa, moving avg calc blew up! " + str(e)
-                db.rollback()  
+                db.rollback()
 
 def tenMins(db, exid, curid, rows  ):
     print "Doing 10 minute mv avg"
@@ -149,13 +149,13 @@ def getTheRows( db, exid, curid ):
     filterdate = datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
 
     sql = """
-        select * 
-        from quote where 
-        currencypair_id=%d and 
-        exchange_id=%d and 
+        select *
+        from quote where
+        currencypair_id=%d and
+        exchange_id=%d and
         created >= '%s'
         """ % ( curid, exid, filterdate)
-        
+
     print sql
     cursor = db.cursor()
     cursor.execute( sql )
@@ -183,7 +183,7 @@ def runCalcs( args ):
             params["host"],
             params["user"],
             params["pass"],
-            params["db"], 
+            params["db"],
             cursorclass=MySQLdb.cursors.DictCursor)
         rows = getTheRows( db, exchange_id, currencypair_id )
     except Exception, e:

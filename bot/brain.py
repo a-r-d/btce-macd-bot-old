@@ -22,7 +22,7 @@ import sharedlib
     5. Keep checking and repeat as necessary.
 
     The reference currncy is USD.
-    The goal is increase USD. 
+    The goal is increase USD.
     We always sell out of the crypto and move to USD when market turns down.
 """
 
@@ -52,8 +52,8 @@ short_avg = "mv_avg_240_min"
 long_avg = "mv_avg_1_day"
 
 
-apikey = "ICB6DNFG-MVGUUK6H-EQUTMXJY-B0BWUBDV-QL84UKE0"
-secret = "1cbbbfe81eb4e6e1b4c6ff391d311e42bc583ffa1e97fd0f485a0471d123fd73"
+apikey = ""
+secret = ""
 
 
 def calcSellQtyCoin(quote, fundsCoin):
@@ -70,7 +70,7 @@ def calcBuyQtyCoin(quote, fundsDollar):
     print "Funds:", fundsDollar
     price = quote.ask
     #always leave 1%
-    # buy will be in dollars. 
+    # buy will be in dollars.
     qty = fundsDollar * 0.99
     qty = qty / quote.last
     #divide the quantity dollars by the dollar quote coin
@@ -84,7 +84,7 @@ def mainLoop():
     api = sharedlib.BtceHelper(apikey, secret, active_pair)
 
     while(1):
-        if verbose: 
+        if verbose:
             ts = time.strftime("%b %d %Y %H:%M:%S", time.gmtime(time.time()))
             print "Entering Trade Loop", ts
 
@@ -100,7 +100,7 @@ def mainLoop():
         else:
             uptrend = None
 
-        if verbose: 
+        if verbose:
             print "Quote Date:", quote.created, " last:", quote.last
             print "Short MA:", short_ma
             print "Long MA:", long_ma
